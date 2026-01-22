@@ -13,6 +13,7 @@ class SignalBoardAnalytics {
       daily: [],
       weekly: [],
       monthly: []
+      yearly: []
     };
     this.riskIndicators = [];
     this.initializeAnalytics();
