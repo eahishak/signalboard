@@ -1086,16 +1086,15 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
     renderRecentSignals();
     renderTimeline();
     
-    console.log(`✓ Generated ${count} demo signal`);
+    console.log(`✓ Generated ${count} demo signals`);
   };
   
   console.log('Development mode active');
   console.log('Try: debugSignalBoard() or generateDemoSignals(20)');
 }
 
-// ===================================
+
 // FINAL INITIALIZATION LOG
-// ===================================
 console.log('╔══════════════════════════════════════╗');
 console.log('║      SignalBoard - PM Edition        ║');
 console.log('║  Customer Feedback Signal Tracker   ║');
