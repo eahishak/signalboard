@@ -1,15 +1,20 @@
-<!-- Setup Instructions -->
+<!--
+PRODUCT SETUP GUIDE
+SignalBoard
 
-Hey! Quick guide to get everything running.
+Purpose
+This document explains how to run SignalBoard locally, validate modules are connected, and confirm the demo data and mobile behavior work.
+Written for PMs, engineers, and reviewers who need clear setup steps and verification checks.
+-->
 
-First, add these CSS files to your HTML head:
+<!-- 1. Initial Setup -->
 
+<!-- Add these CSS files inside the HTML head -->
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="advanced.css" />
 <link rel="stylesheet" href="mobile-responsive.css" />
 
-Then add the JavaScript files right before your closing body tag:
-
+<!-- Add these JavaScript files directly before the closing body tag in this exact order -->
 <script src="app.js"></script>
 <script src="analytics.js"></script>
 <script src="animations.js"></script>
@@ -17,29 +22,31 @@ Then add the JavaScript files right before your closing body tag:
 <script src="mobile-enhancements.js"></script>
 <script src="demo.js"></script>
 
-That's basically it. The integration script handles connecting everything.
+<!-- Integration note
+integration.js connects modules and initializes SignalBoard state and routing
+-->
 
-
-Complete HTML Structure
------------------------
-
-Your head section should look like:
+<!-- 2. Required HTML Structure -->
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CaloCount Pro</title>
-  
+  <title>SignalBoard</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="advanced.css" />
   <link rel="stylesheet" href="mobile-responsive.css" />
 </head>
 
-And your scripts before closing body:
+<body>
+  <!-- SignalBoard UI mounts here -->
 
   <script src="app.js"></script>
   <script src="analytics.js"></script>
@@ -49,78 +56,66 @@ And your scripts before closing body:
   <script src="demo.js"></script>
 </body>
 
+<!-- 3. What You Get
 
-What You Get
-------------
+Once you load the page, SignalBoard initializes and you have:
 
-Once you load the page, you'll have:
+Core areas
+Dashboard with key signals and high level metrics
+Scanner or capture flow for adding new entries if enabled in app.js
+History or activity view for recent items
+Plans or targets section if enabled in your build
+Analytics view with charts, trends, and predictions
+Profile and settings with picture upload
 
-- Dashboard with calorie tracking
-- AI meal scanner using your camera
-- History page with all your meals
-- Plans to set nutrition goals
-- Analytics with charts and predictions
-- Profile settings with picture upload
+Mobile behavior
+Bottom navigation bar
+Top header
+Swipe gestures
+Pull to refresh on real touch devices
+Floating primary action button if enabled
+-->
 
-On mobile you'll see:
-- Bottom nav bar
-- Top header
-- Swipe gestures work
-- Pull down to refresh
-- Floating camera button
+<!-- 4. Testing It Works
 
-
-Testing It Works
-----------------
-
-Open your browser console. You should see messages like:
-
-CaloCount Pro initialized successfully!
+Open your browser console after load.
+You should see module initialization logs similar to:
+SignalBoard initialized successfully
 Advanced Analytics Module Loaded
 Advanced Animations Module Loaded
 Mobile Enhancements Module Loaded
 
-Try this in console:
-demo.loadData()
+Manual QA commands
+demo.loadData() populates sample data so charts and lists have content
+demo.comprehensive() runs a full demo walkthrough
+-->
 
-That puts in 2 weeks of sample meals so you can see the charts populate.
+<!-- 5. Troubleshooting
 
-For a full demo:
-demo.comprehensive()
+Charts not showing
+Confirm analytics.js loads before integration.js
 
+Mobile nav missing
+Confirm mobile-enhancements.js is included and screen width is under 768px
 
-Troubleshooting
----------------
+Profile picture upload not working
+Confirm mobile-enhancements.js is included and image size is under 5MB
 
-Charts not showing?
-Make sure analytics.js loaded before integration.js
+Animations not working
+Confirm animations.js is loaded and no console errors exist
+-->
 
-Mobile nav missing?
-Check mobile-enhancements.js is included
+<!-- 6. Customizing Colors
 
-Profile picture upload broken?
-Same thing - need mobile-enhancements.js
+Open style.css and update the :root variables near the top, for example:
+--primary-600
+--secondary-600
+This updates SignalBoard branding across the UI.
+-->
 
-Animations not working?
-animations.js needs to be there
+<!-- 7. File Checklist
 
-
-Customizing Colors
-------------------
-
-Open style.css and look for the :root section at the top. Change these:
-
---primary-600: #6366f1;
---secondary-600: #8b5cf6;
-
-Pick whatever colors you want.
-
-
-File Checklist
---------------
-
-Make sure you have all these in your project folder:
-
+These files must exist in the same project folder:
 index.html
 style.css
 advanced.css
@@ -131,91 +126,73 @@ animations.js
 integration.js
 mobile-enhancements.js
 demo.js
+-->
 
-That's 10 files total for the app to work properly.
+<!-- 8. Browser Support
 
-
-Browser Support
----------------
-
-Works on:
-Chrome, Firefox, Safari, Edge
+Works on modern:
+Chrome
+Firefox
+Safari
+Edge
+Also works on:
 iOS Safari
 Android Chrome
-Pretty much any modern browser from the last couple years
+-->
 
+<!-- 9. Performance Notes
 
-Performance Tips
-----------------
+Optimizations included:
+Images lazy load
+Animations use requestAnimationFrame
+Charts render with canvas when available
+LocalStorage caching for client state
+-->
 
-The app is already optimized but if you want it faster:
+<!-- 10. Development Mode Utilities
 
-- Images are lazy loaded by default
-- Animations use requestAnimationFrame
-- Charts render with canvas (faster than SVG)
-- LocalStorage caching for everything
+demo.js helpers:
+demo.stats() shows app statistics
+demo.export() downloads data as JSON
+demo.particles() tests particle effects
+demo.confetti() celebration animation
+demo.analytics() jumps to analytics view
+-->
 
-Should run smooth on any device.
+<!-- 11. Mobile Testing
 
+Fast check
+Resize your browser window below 768px
 
-Development Mode
-----------------
+Real device testing
+Serve files from a local server
+Open from your phone browser
+Test gestures and touch behavior
 
-When you're testing, keep the console open. Any errors will show up there.
+Pull to refresh only works on real touch devices
+-->
 
-The demo.js file has a bunch of test functions:
+<!-- 12. Going Live
 
-demo.stats() - shows app statistics
-demo.export() - downloads your data as JSON
-demo.particles() - tests particle effects
-demo.confetti() - celebration animation
-demo.analytics() - switches to analytics view
+No backend required for the demo build
+Upload files to any static host:
+GitHub Pages
+Netlify
+Vercel
+Standard web hosting
+-->
 
-Useful for making sure everything works.
+<!-- 13. Common Issues
 
+Nothing happens when I click save
+Confirm app.js loaded and check console errors
 
-Mobile Testing
---------------
+Analytics page blank
+You need data first, run demo.loadData()
 
-Easiest way is to resize your browser window below 768px width. Or use Chrome DevTools device toolbar.
+Mobile bottom nav not showing
+Width must be under 768px and mobile-responsive.css must be loaded
 
-Real device testing:
-1. Put files on a local server
-2. Access from your phone's browser
-3. Test gestures and touches
-
-Pull-to-refresh only works on real touch devices, not mouse simulation.
-
-
-Going Live
-----------
-
-Since there's no backend, you can just upload all the files to any static host:
-
-- GitHub Pages
-- Netlify
-- Vercel
-- Regular web hosting
-
-Upload the 10 core files plus any docs you want. Done.
-
-
-Common Issues
--------------
-
-"Nothing happens when I click save"
-- Check app.js loaded
-- Look for console errors
-
-"Analytics page is blank"
-- You need some meal data first
-- Run demo.loadData()
-
-"Mobile bottom nav doesn't show"
-- Window width needs to be under 768px
-- Check mobile-responsive.css loaded
-
-
-"Profile picture won't upload"
-- mobile-enhancements.js required
-- Check file size (5MB limit)
+Profile picture will not upload
+mobile-enhancements.js required and file size under 5MB
+-->
