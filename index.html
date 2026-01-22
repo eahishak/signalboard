@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SignalBoard - Internal customer feedback aggregation and analysis tool for product teams" />
+  <meta name="author" content="Emmanuel Ahishakiye" />
+  <title>SignalBoard - Customer Feedback Signals</title>
+
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="advanced.css" />
+  <link rel="stylesheet" href="mobile-responsive.css" />
+  <link rel="stylesheet" href="chatbot.css" />
+</head>
+
+<body>
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay hidden" role="alert" aria-live="polite">
+    <div class="loading-spinner" aria-label="Loading"></div>
+    <p class="loading-text">Analyzing customer feedback...</p>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast hidden" role="status" aria-live="polite">
+    <span id="toast-message"></span>
+  </div>
+
+  <div id="app" class="app-container">
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" role="navigation" aria-label="Main navigation">
+      <div class="sidebar-header">
+        <div class="logo">
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <rect width="32" height="32" rx="8" fill="url(#gradient)" />
+            <path d="M10 12h12M10 16h12M10 20h8" stroke="white" stroke-width="2" stroke-linecap="round"/>
+            <defs>
+              <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32">
+                <stop offset="0%" stop-color="#6366f1" />
+                <stop offset="100%" stop-color="#8b5cf6" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="logo-text">SignalBoard</span>
+        </div>
+        <p class="logo-subtitle">Customer feedback signals</p>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-view="dashboard" aria-current="page">
+          <span>📊 Overview</span>
+        </button>
+        <button class="nav-item" data-view="capture">
+          <span>📥 Capture</span>
+        </button>
+        <button class="nav-item" data-view="history">
+          <span>📋 Timeline</span>
+        </button>
+        <button class="nav-item" data-view="benchmarks">
+          <span>⚖️ Benchmarks</span>
+        </button>
+        <button class="nav-item" data-view="analytics">
+          <span>📈 Insights</span>
+        </button>
+        <button class="nav-item" data-view="profile">
+          <span>👤 Profile</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="theme-toggle">
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+          </svg>
+          <span>Dark Mode</span>
+          <label class="switch">
+            <input type="checkbox" id="theme-switch" aria-label="Toggle dark mode">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content" role="main">
+
+      <!-- Dashboard / Overview -->
+      <section id="dashboard-view" class="view active" aria-labelledby="dashboard-title">
+        <header class="view-header">
+          <div>
+            <h1 id="dashboard-title" class="view-title">Overview</h1>
+            <p class="view-subtitle">Daily impact, progress, and signal distribution</p>
+          </div>
+          <button class="btn-primary" onclick="switchView('capture')">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+            </svg>
+            Capture Signal
+          </button>
+        </header>
+
+        <!-- KPI Metrics -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon">📊</span>
+              <h3 class="stat-label">Daily Impact</h3>
+            </div>
+            <div class="stat-value" id="daily-impact">324</div>
+            <div class="stat-meta">
+              <span class="stat-change positive">↑ 12%</span>
+              <span>vs yesterday</span>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 78%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon">🎯</span>
+              <h3 class="stat-label">Benchmark Progress</h3>
+            </div>
+            <div class="stat-value" id="benchmark-value">87%</div>
+            <div class="stat-meta">
+              <span class="stat-change positive">On track</span>
+              <span>Target: 1000</span>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-bar">
+                <div class="progress-fill success" style="width: 87%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon">🔥</span>
+              <h3 class="stat-label">Critical Signals</h3>
+            </div>
+            <div class="stat-value" id="critical-signals">7</div>
+            <div class="stat-meta">
+              <span class="stat-change negative">+2 new</span>
+              <span>Require action</span>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-bar">
+                <div class="progress-fill error" style="width: 35%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-header">
+              <span class="stat-icon">📈</span>
+              <h3 class="stat-label">Signal Velocity</h3>
+            </div>
+            <div class="stat-value" id="signal-velocity">42</div>
+            <div class="stat-meta">
+              <span class="stat-change neutral">Steady</span>
+              <span>signals/week</span>
+            </div>
+            <div class="stat-progress">
+              <div class="progress-bar">
+                <div class="progress-fill" style="width: 65%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Signals List -->
+        <div class="section-header">
+          <h2 class="section-title">Recent Signals</h2>
+          <button class="btn-secondary" onclick="clearTodaySignals()">Clear Today</button>
+        </div>
+
+        <div class="signals-grid" id="recent-signals">
+          <div class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 20 20" fill="currentColor" opacity="0.3" aria-hidden="true">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" />
+            </svg>
+            <p>No signals captured yet today</p>
+            <button class="btn-primary" onclick="switchView('capture')">Capture First Signal</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Capture Signal -->
+      <section id="capture-view" class="view">
+        <header class="view-header">
+          <div>
+            <h1 class="view-title">Capture Signal</h1>
+            <p class="view-subtitle">Ingest feedback from any source</p>
+          </div>
+          <button class="btn-secondary" onclick="switchView('dashboard')">Cancel</button>
+        </header>
+
+        <div class="capture-container">
+          <div class="capture-options">
+            <button class="btn-control" id="upload-btn">
+              <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM6.293 6.707a1 1 0 010-1.414l3-3a1 1 0 011.414 0l3 3a1 1 0 01-1.414 1.414L11 5.414V13a1 1 0 11-2 0V5.414L7.707 6.707a1 1 0 01-1.414 0z" />
+              </svg>
+              <span>Upload CSV</span>
+              <small>Bulk import from support tickets</small>
+            </button>
+            <button class="btn-control" id="paste-btn">
+              <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+                <path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+              </svg>
+              <span>Paste Feedback</span>
+              <small>Direct text input</small>
+            </button>
+            <button class="btn-control" id="github-btn">
+              <svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" />
+              </svg>
+              <span>GitHub Issues</span>
+              <small>Import from repository</small>
+            </button>
+          </div>
+
+          <input type="file" id="file-input" accept=".csv,.txt" style="display: none" />
+
+          <!-- Signal Form -->
+          <div id="signal-form-container" class="signal-form-container hidden">
+            <h3 class="section-title">Signal Details</h3>
+            
+            <form id="signal-form" class="signal-form">
+              <div class="form-group">
+                <label class="form-label">Signal Title</label>
+                <input type="text" id="signal-title" class="form-input" placeholder="e.g., Workers timeout under high load in EU region" required />
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Impact Score</label>
+                  <input type="number" id="signal-impact" class="form-input" placeholder="0-100" min="0" max="100" />
+                  <small class="form-help">Normalized user + business effect</small>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Urgency</label>
+                  <select id="signal-urgency" class="form-input">
+                    <option value="1">Low</option>
+                    <option value="2">Medium</option>
+                    <option value="3" selected>High</option>
+                    <option value="4">Critical</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Source</label>
+                  <select id="signal-source" class="form-input">
+                    <option value="github">GitHub Issues</option>
+                    <option value="support">Support Tickets</option>
+                    <option value="community">Community Forum</option>
+                    <option value="sales">Sales Team</option>
+                    <option value="internal">Internal Team</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Category</label>
+                  <select id="signal-category" class="form-input">
+                    <option value="bug">Bug / Reliability</option>
+                    <option value="feature">Feature Request</option>
+                    <option value="performance">Performance</option>
+                    <option value="ux">User Experience</option>
+                    <option value="documentation">Documentation</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Customer Tier</label>
+                <select id="signal-tier" class="form-input">
+                  <option value="enterprise">Enterprise</option>
+                  <option value="pro">Pro</option>
+                  <option value="free">Free</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Context</label>
+                <textarea id="signal-context" class="form-textarea" rows="4" placeholder="Relevant background, affected regions, workarounds..."></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="hideSignalForm()">Cancel</button>
+                <button type="submit" class="btn-primary" id="save-signal-btn">Save Signal</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- Timeline / History -->
+      <section id="history-view" class="view">
+        <header class="view-header">
+          <div>
+            <h1 class="view-title">Signal Timeline</h1>
+            <p class="view-subtitle">Chronological view of all captured signals</p>
+          </div>
+          <div class="view-actions">
+            <select id="history-filter" class="form-select">
+              <option value="all">All Time</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+            </select>
+          </div>
+        </header>
+
+        <div id="timeline-list" class="timeline-list">
+          <div class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 20 20" fill="currentColor" opacity="0.3">
+              <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" />
+            </svg>
+            <p>No signals found for this period</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Benchmarks -->
+      <section id="benchmarks-view" class="view">
+        <header class="view-header">
+          <div>
+            <h1 class="view-title">Benchmarks</h1>
+            <p class="view-subtitle">Define baseline metrics to measure signal impact</p>
+          </div>
+          <button class="btn-primary" onclick="showCreateBenchmark()">Create Benchmark</button>
+        </header>
+
+        <div id="benchmarks-list" class="benchmarks-list">
+          <div class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 20 20" fill="currentColor" opacity="0.3">
+              <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
+            </svg>
+            <p>No benchmarks defined yet</p>
+            <button class="btn-primary" onclick="showCreateBenchmark()">Create First Benchmark</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Analytics & Insights -->
+      <section id="analytics-view" class="view">
+        <header class="view-header">
+          <div>
+            <h1 class="view-title">Insights</h1>
+            <p class="view-subtitle">AI-powered signal analysis and risk indicators</p>
+          </div>
+          <button class="btn-secondary" onclick="refreshInsights()">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" />
+            </svg>
+            Refresh
+          </button>
+        </header>
+
+        <div class="section-header">
+          <h2 class="section-title">Key Product Signals</h2>
+          <p class="section-description">AI-generated insights from recent feedback</p>
+        </div>
+
+        <div class="insights-grid">
+          <div class="insight-card insight-alert">
+            <span class="insight-icon">🚨</span>
+            <div class="insight-content">
+              <h4 class="insight-title">Reliability Issues Increasing</h4>
+              <p class="insight-message">Timeout-related complaints increased 32% week over week, primarily from enterprise customers using Workers in APAC regions.</p>
+            </div>
+          </div>
+
+          <div class="insight-card insight-warning">
+            <span class="insight-icon">⚠️</span>
+            <div class="insight-content">
+              <h4 class="insight-title">Feature Request Cluster</h4>
+              <p class="insight-message">12 enterprise customers requested native TypeScript support for Workers bindings. Quick win for developer experience.</p>
+            </div>
+          </div>
+
+          <div class="insight-card insight-success">
+            <span class="insight-icon">✅</span>
+            <div class="insight-content">
+              <h4 class="insight-title">Positive Sentiment Trend</h4>
+              <p class="insight-message">R2 pricing changes received 94% positive feedback from storage-heavy enterprise users.</p>
+            </div>
+          </div>
+
+          <div class="insight-card insight-info">
+            <span class="insight-icon">💡</span>
+            <div class="insight-content">
+              <h4 class="insight-title">Documentation Gap</h4>
+              <p class="insight-message">Support tickets show confusion around KV consistency model. Consider improving docs or adding examples.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-header" style="margin-top: 2rem;">
+          <h2 class="section-title">Signal Trends</h2>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Weekly Signal Volume</h3>
+              <p class="chart-subtitle">Last 14 days</p>
+            </div>
+          </div>
+          <canvas id="trend-chart" width="800" height="300"></canvas>
+        </div>
+
+        <div class="section-header" style="margin-top: 2rem;">
+          <h2 class="section-title">Risk Forecast</h2>
+        </div>
+
+        <div class="predictions-grid">
+          <div class="prediction-card">
+            <div class="prediction-date">Tomorrow</div>
+            <div class="prediction-value">47</div>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Expected signals</p>
+            <div class="prediction-confidence">
+              <div class="confidence-bar">
+                <div class="confidence-fill" style="width: 85%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prediction-card">
+            <div class="prediction-date">Next Week</div>
+            <div class="prediction-value">312</div>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">Expected signals</p>
+            <div class="prediction-confidence">
+              <div class="confidence-bar">
+                <div class="confidence-fill" style="width: 70%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="prediction-card">
+            <div class="prediction-date">Churn Risk</div>
+            <div class="prediction-value">High</div>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.5rem;">3 enterprise accounts</p>
+            <div class="prediction-confidence">
+              <div class="confidence-bar">
+                <div class="confidence-fill" style="width: 92%; background: linear-gradient(90deg, #ef4444, #f87171);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PM Profile -->
+      <section id="profile-view" class="view">
+        <header class="view-header">
+          <div>
+            <h1 class="view-title">PM Profile</h1>
+            <p class="view-subtitle">Manage your product context and preferences</p>
+          </div>
+        </header>
+
+        <div class="profile-card">
+          <div class="profile-header">
+            <div class="profile-avatar-wrapper">
+              <div class="profile-avatar" id="profile-avatar-placeholder">
+                <svg width="48" height="48" viewBox="0 0 20 20" fill="white">
+                  <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" />
+                </svg>
+              </div>
+              <img id="profile-avatar-img" class="profile-avatar-image hidden" alt="Profile" />
+              <button type="button" class="profile-avatar-edit" id="edit-avatar-btn">✏️</button>
+              <input type="file" id="avatar-upload" accept="image/*" style="display: none;" />
+            </div>
+            <div class="profile-info">
+              <h2 class="profile-name" id="profile-display-name">Emmanuel Ahishakiye</h2>
+              <p class="profile-email" id="profile-display-email">emmanuel@cloudflare.com</p>
+            </div>
+          </div>
+
+          <form id="profile-form" class="profile-form">
+            <div class="form-group">
+              <label class="form-label">Full Name</label>
+              <input type="text" id="user-name" class="form-input" value="Emmanuel Ahishakiye" required />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Work Email</label>
+              <input type="email" id="user-email" class="form-input" value="emmanuel@cloudflare.com" required />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Product Area</label>
+                <select id="user-product-area" class="form-input">
+                  <option>Developer Platform</option>
+                  <option>Network Services</option>
+                  <option>Security</option>
+                  <option>Analytics & Logs</option>
+                  <option>Workers & Pages</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Team</label>
+                <input type="text" id="user-team" class="form-input" value="Product Management" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Focus Area</label>
+              <select id="user-focus" class="form-input">
+                <option value="reliability">Reliability & Performance</option>
+                <option value="growth">Growth & Adoption</option>
+                <option value="enterprise">Enterprise Features</option>
+                <option value="devex">Developer Experience</option>
+              </select>
+            </div>
+
+            <button type="submit" class="btn-primary">Save Changes</button>
+          </form>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+  <script src="analytics.js"></script>
+  <script src="animation.js"></script>
+  <script src="integration.js"></script>
+  <script src="mobile-enhancements.js"></script>
+  <script src="chatbot.js"></script>
+  <script src="demo.js"></script>
+</body>
+</html>

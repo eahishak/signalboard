@@ -1,0 +1,221 @@
+<!-- Setup Instructions -->
+
+Hey! Quick guide to get everything running.
+
+First, add these CSS files to your HTML head:
+
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="advanced.css" />
+<link rel="stylesheet" href="mobile-responsive.css" />
+
+Then add the JavaScript files right before your closing body tag:
+
+<script src="app.js"></script>
+<script src="analytics.js"></script>
+<script src="animations.js"></script>
+<script src="integration.js"></script>
+<script src="mobile-enhancements.js"></script>
+<script src="demo.js"></script>
+
+That's basically it. The integration script handles connecting everything.
+
+
+Complete HTML Structure
+-----------------------
+
+Your head section should look like:
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CaloCount Pro</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="advanced.css" />
+  <link rel="stylesheet" href="mobile-responsive.css" />
+</head>
+
+And your scripts before closing body:
+
+  <script src="app.js"></script>
+  <script src="analytics.js"></script>
+  <script src="animations.js"></script>
+  <script src="integration.js"></script>
+  <script src="mobile-enhancements.js"></script>
+  <script src="demo.js"></script>
+</body>
+
+
+What You Get
+------------
+
+Once you load the page, you'll have:
+
+- Dashboard with calorie tracking
+- AI meal scanner using your camera
+- History page with all your meals
+- Plans to set nutrition goals
+- Analytics with charts and predictions
+- Profile settings with picture upload
+
+On mobile you'll see:
+- Bottom nav bar
+- Top header
+- Swipe gestures work
+- Pull down to refresh
+- Floating camera button
+
+
+Testing It Works
+----------------
+
+Open your browser console. You should see messages like:
+
+CaloCount Pro initialized successfully!
+Advanced Analytics Module Loaded
+Advanced Animations Module Loaded
+Mobile Enhancements Module Loaded
+
+Try this in console:
+demo.loadData()
+
+That puts in 2 weeks of sample meals so you can see the charts populate.
+
+For a full demo:
+demo.comprehensive()
+
+
+Troubleshooting
+---------------
+
+Charts not showing?
+Make sure analytics.js loaded before integration.js
+
+Mobile nav missing?
+Check mobile-enhancements.js is included
+
+Profile picture upload broken?
+Same thing - need mobile-enhancements.js
+
+Animations not working?
+animations.js needs to be there
+
+
+Customizing Colors
+------------------
+
+Open style.css and look for the :root section at the top. Change these:
+
+--primary-600: #6366f1;
+--secondary-600: #8b5cf6;
+
+Pick whatever colors you want.
+
+
+File Checklist
+--------------
+
+Make sure you have all these in your project folder:
+
+index.html
+style.css
+advanced.css
+mobile-responsive.css
+app.js
+analytics.js
+animations.js
+integration.js
+mobile-enhancements.js
+demo.js
+
+That's 10 files total for the app to work properly.
+
+
+Browser Support
+---------------
+
+Works on:
+Chrome, Firefox, Safari, Edge
+iOS Safari
+Android Chrome
+Pretty much any modern browser from the last couple years
+
+
+Performance Tips
+----------------
+
+The app is already optimized but if you want it faster:
+
+- Images are lazy loaded by default
+- Animations use requestAnimationFrame
+- Charts render with canvas (faster than SVG)
+- LocalStorage caching for everything
+
+Should run smooth on any device.
+
+
+Development Mode
+----------------
+
+When you're testing, keep the console open. Any errors will show up there.
+
+The demo.js file has a bunch of test functions:
+
+demo.stats() - shows app statistics
+demo.export() - downloads your data as JSON
+demo.particles() - tests particle effects
+demo.confetti() - celebration animation
+demo.analytics() - switches to analytics view
+
+Useful for making sure everything works.
+
+
+Mobile Testing
+--------------
+
+Easiest way is to resize your browser window below 768px width. Or use Chrome DevTools device toolbar.
+
+Real device testing:
+1. Put files on a local server
+2. Access from your phone's browser
+3. Test gestures and touches
+
+Pull-to-refresh only works on real touch devices, not mouse simulation.
+
+
+Going Live
+----------
+
+Since there's no backend, you can just upload all the files to any static host:
+
+- GitHub Pages
+- Netlify
+- Vercel
+- Regular web hosting
+
+Upload the 10 core files plus any docs you want. Done.
+
+
+Common Issues
+-------------
+
+"Nothing happens when I click save"
+- Check app.js loaded
+- Look for console errors
+
+"Analytics page is blank"
+- You need some meal data first
+- Run demo.loadData()
+
+"Mobile bottom nav doesn't show"
+- Window width needs to be under 768px
+- Check mobile-responsive.css loaded
+
+
+"Profile picture won't upload"
+- mobile-enhancements.js required
+- Check file size (5MB limit)
