@@ -1086,7 +1086,7 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
     renderRecentSignals();
     renderTimeline();
     
-    console.log(`✓ Generated ${count} demo signals`);
+    console.log(`✓ Generated ${count} demo signal`);
   };
   
   console.log('Development mode active');
